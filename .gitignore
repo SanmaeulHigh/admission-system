@@ -1,0 +1,51 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 환경변수 (Supabase 키 등 절대 커밋 금지)
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Supabase
+supabase/.temp
+supabase/.branches
+*.tsbuildinfo
+
+# 가명 테스트 데이터 (실데이터 반입 금지 원칙 - 섹션 9.3)
+/scripts/seed-data/*.local.json
+
+
+supabase/tests/interview-call-rehearsal-setup.sql
+
+# https 설치 스크립트가 복사해 두는 학교 루트 인증서(공개 파일이지만 저장소에는 넣지 않음)
+(학교 루트 인증서)
+deploy/https/secrets/
+
+# pdf.js 보조 자료 — 빌드 때 node_modules 에서 복사(scripts/copy-pdfjs-assets.mjs)
+public/pdfjs/
+
+# 대외비 자료(채점기준표 원문 등) — 커밋 금지
+supabase/private/

@@ -1,0 +1,333 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 전체 기본 글꼴: Pretendard (SIL 오픈 폰트 라이선스 — 웹 임베딩·재배포 허용).
+   교내망 서버라 외부 CDN에 기대지 않고 public/fonts/ 에 파일을 두고 쓴다.
+   가변 글꼴(Variable) 한 파일에 45~920 굵기가 모두 들어 있어
+   font-medium·font-semibold 등 Tailwind 굵기가 그대로 표현된다.
+   font-display: swap — 글꼴을 받는 동안에도 기본 글꼴로 먼저 글자를 보여준다. */
+@font-face {
+  font-family: 'Pretendard Variable';
+  src: url('/fonts/PretendardVariable.woff2') format('woff2-variations');
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* UX1 명세서 2.3 — 새봄고 로고 기반 색상 토큰 (raw CSS 변수).
+   Tailwind 유틸리티는 tailwind.config.js의 brand·status·surface 토큰을 쓰고,
+   순수 CSS·인라인 스타일이 필요한 곳(예: 인쇄 화면)에서는 이 변수를 쓴다. */
+:root {
+  --brand-orange: #F39800;
+  --brand-orange-soft: #FFF4DF;
+  --brand-orange-strong: #A35F00;
+
+  --brand-green: #6EB92B;
+  --brand-green-soft: #EFF8E7;
+  --brand-deep-green: #00873C;
+  --brand-deep-green-strong: #006B2F;
+
+  /* 주 색상 채널(Tailwind brand.deepGreen 등이 이 값을 쓴다). 신입학 = 새봄 초록 */
+  --theme-green-rgb: 110 185 43;
+  --theme-green-soft-rgb: 239 248 231;
+  --theme-deep-rgb: 0 135 60;
+  --theme-deep-strong-rgb: 0 107 47;
+
+  --brand-blue: #0068B7;
+  --brand-blue-soft: #EAF4FB;
+
+  --status-danger: #C9362B;
+  --status-danger-soft: #FFF0EE;
+  --status-warning: #9A5900;
+  --status-warning-soft: #FFF7E8;
+
+  --surface-canvas: #F7F8F6;
+  --surface-card: #FFFFFF;
+  --surface-subtle: #F1F3F0;
+
+  --border-default: #E1E5DF;
+  --border-strong: #CBD2C8;
+
+  --text-primary: #1D241F;
+  --text-secondary: #5F6B63;
+  --text-muted: #687169;
+}
+
+/* 전·편입학 모드(2026-10-20): 신입학과 헷갈리지 않게 주 색상을 파란 계열로 바꾼다.
+   흰 글씨 버튼 대비 4.5:1 이상(#1660B0 ≈ 6.3:1). */
+:root[data-admission-mode='transfer'] {
+  --brand-green: #4C93D9;
+  --brand-green-soft: #EAF2FB;
+  --brand-deep-green: #1660B0;
+  --brand-deep-green-strong: #0E4C8F;
+
+  --theme-green-rgb: 76 147 217;
+  --theme-green-soft-rgb: 234 242 251;
+  --theme-deep-rgb: 22 96 176;
+  --theme-deep-strong-rgb: 14 76 143;
+}
+
+/* ------------------------------------------------------------------
+   색 채널(2026-10-26, 다크 모드) — Tailwind 토큰(surface·ink·border·status 등)이 이 값을 쓴다.
+   밝은 값은 예전 고정색과 같다.
+   ------------------------------------------------------------------ */
+:root {
+  --c-canvas: 247 248 246;
+  --c-card: 255 255 255;
+  --c-subtle: 241 243 240;
+  --c-border: 225 229 223;
+  --c-border-strong: 203 210 200;
+  --c-ink: 29 36 31;
+  --c-ink-2: 95 107 99;
+  --c-ink-3: 104 113 105;
+  --c-danger: 201 54 43;
+  --c-danger-soft: 255 240 238;
+  --c-warning: 154 89 0;
+  --c-warning-soft: 255 247 232;
+  --c-orange-soft: 255 244 223;
+  --c-blue: 0 104 183;
+  --c-blue-soft: 234 244 251;
+}
+
+/* 다크 모드: 업무 화면(AdminShell)에서만 data-theme='dark'가 붙는다(src/lib/theme.js).
+   인쇄 서식 화면은 셸 밖이라 늘 밝게, 인쇄할 때도 밝게(@media screen 안에만 둔다). */
+@media screen {
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+    --c-canvas: 17 21 19;
+    --c-card: 26 31 28;
+    --c-subtle: 34 41 37;
+    --c-border: 52 62 56;
+    --c-border-strong: 72 85 77;
+    --c-ink: 230 235 231;
+    --c-ink-2: 176 187 179;
+    --c-ink-3: 146 156 149;
+    --c-danger: 255 138 128;
+    --c-danger-soft: 58 30 28;
+    --c-warning: 236 178 92;
+    --c-warning-soft: 56 44 22;
+    --c-orange-soft: 58 44 20;
+    --c-blue: 120 182 240;
+    --c-blue-soft: 22 38 58;
+
+    /* 주 색상: 버튼 바탕(deep)은 그대로, 글자로 많이 쓰는 strong은 밝게, soft는 어둡게 */
+    --theme-green-soft-rgb: 30 54 36;
+    --theme-deep-strong-rgb: 126 206 140;
+    --brand-green-soft: #1E3624;
+
+    --surface-canvas: #111513;
+    --surface-card: #1A1F1C;
+    --surface-subtle: #222925;
+    --border-default: #343E38;
+    --border-strong: #48554D;
+    --text-primary: #E6EBE7;
+    --text-secondary: #B0BBB3;
+    --text-muted: #929C95;
+    --status-danger-soft: #3A1E1C;
+    --status-warning-soft: #382C16;
+  }
+  :root[data-theme='dark'][data-admission-mode='transfer'] {
+    --theme-green-soft-rgb: 22 38 60;
+    --theme-deep-strong-rgb: 130 180 236;
+    --brand-green-soft: #16263C;
+  }
+
+  /* 고정색(흰 바탕 등)으로 적힌 곳을 다크 색으로 */
+  :root[data-theme='dark'] .bg-white,
+  :root[data-theme='dark'] .hover\:bg-white:hover,
+  :root[data-theme='dark'] .focus\:bg-white:focus { background-color: rgb(var(--c-card)); }
+  :root[data-theme='dark'] .bg-white\/95 { background-color: rgb(var(--c-card) / 0.95); }
+  :root[data-theme='dark'] .bg-\[\#F6F6F6\],
+  :root[data-theme='dark'] .bg-\[\#EFEFEF\],
+  :root[data-theme='dark'] .bg-\[\#FAFBFA\],
+  :root[data-theme='dark'] .bg-\[\#F4F6F3\],
+  :root[data-theme='dark'] .bg-gray-50 { background-color: rgb(var(--c-subtle)); }
+  :root[data-theme='dark'] .bg-\[\#F8FBF5\],
+  :root[data-theme='dark'] .group:hover .group-hover\:bg-\[\#F8FBF5\] { background-color: #222B25; }
+  :root[data-theme='dark'] .bg-\[\#EAF5E2\] { background-color: #22382A; }
+  :root[data-theme='dark'] .bg-\[\#DDEFD0\] { background-color: #2A4533; }
+  :root[data-theme='dark'] .border-\[\#E6E9E5\],
+  :root[data-theme='dark'] .border-\[\#CFE6C0\] { border-color: rgb(var(--c-border)); }
+  :root[data-theme='dark'] .text-\[\#9AA19B\],
+  :root[data-theme='dark'] .text-gray-500,
+  :root[data-theme='dark'] .text-gray-400 { color: rgb(var(--c-ink-3)); }
+  :root[data-theme='dark'] .text-\[\#C8CCC7\] { color: #5C665F; }
+
+  /* 진한 바탕 + 흰 글씨 조합은 다크에서도 진하게 유지 */
+  :root[data-theme='dark'] .bg-brand-deepGreenStrong,
+  :root[data-theme='dark'] .hover\:bg-brand-deepGreenStrong:hover { background-color: rgb(var(--theme-deep-rgb)); filter: brightness(1.12); }
+  :root[data-theme='dark'] .bg-ink-primary { background-color: #2F3A33; }
+  :root[data-theme='dark'] .bg-status-danger { background-color: #B3362C; }
+  :root[data-theme='dark'] .bg-status-warning { background-color: #8A5200; }
+
+  /* 서류(PDF·사진)는 종이 그대로 밝게 — pdf.js 캔버스 바탕 */
+  :root[data-theme='dark'] canvas { background-color: #fff; }
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  @apply antialiased;
+  background: var(--surface-canvas);
+  color: var(--text-primary);
+  font-family:
+    'Pretendard Variable',
+    Pretendard,
+    'Noto Sans KR',
+    'Apple SD Gothic Neo',
+    'Malgun Gothic',
+    sans-serif;
+}
+
+/* ------------------------------------------------------------------
+   공통 상호작용 다듬기 (2026-10-12, UI 다듬기 1단계)
+   화면 100여 개를 하나하나 고치지 않고 여기서 한 번에 맞춘다.
+   @layer base에 두어, 개별 화면에 적힌 Tailwind 클래스가 있으면 그쪽이 이긴다.
+   기준: Vercel Web Interface Guidelines, Emil Kowalski 디자인 엔지니어링 원칙.
+   ------------------------------------------------------------------ */
+@layer base {
+  /* 키보드로 이동할 때만 보이는 초점 테두리. 마우스 클릭에는 안 나온다. */
+  a:focus-visible,
+  button:focus-visible,
+  [role='button']:focus-visible,
+  summary:focus-visible,
+  [tabindex]:not([tabindex='-1']):focus-visible {
+    outline: 2px solid var(--brand-deep-green);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  /* 입력칸: 지금 어디에 쓰고 있는지 또렷하게(테두리 진녹 + 옅은 띠) */
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--brand-deep-green);
+    box-shadow: 0 0 0 3px rgb(0 135 60 / 0.18);
+    outline: 2px solid transparent;
+  }
+  input[type='checkbox']:focus-visible,
+  input[type='radio']:focus-visible {
+    outline: 2px solid var(--brand-deep-green);
+    outline-offset: 2px;
+  }
+  input[type='checkbox'],
+  input[type='radio'] {
+    accent-color: var(--brand-deep-green);
+    cursor: pointer;
+  }
+  ::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+  }
+
+  /* 누를 수 있는 것: 손가락 모양 + 두 번 탭 확대 지연 제거 */
+  button,
+  [role='button'],
+  summary,
+  label[for],
+  select {
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:disabled,
+  [aria-disabled='true'] {
+    cursor: not-allowed;
+  }
+
+  /* 버튼을 누르는 순간 살짝 눌리는 느낌 — "눌렸다"는 확인 신호.
+     색 변화는 150ms, 눌림은 120ms로 빠르게(업무 화면은 경쾌해야 한다). */
+  button,
+  a {
+    transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  button:not(:disabled):active {
+    transform: scale(0.97);
+    transition-duration: 80ms;
+  }
+
+  /* 제목은 줄바꿈이 고르게(마지막 줄에 한 글자만 남지 않게) */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  /* 화면 속 표의 숫자는 자릿수를 맞춰 세로로 비교하기 쉽게.
+     (인쇄·PDF용 서식은 main 밖이라 영향 없음 — PDF 숫자 누락 문제 방지) */
+  main table td {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: rgb(110 185 43 / 0.28);
+  }
+}
+
+/* 움직임 줄이기를 켠 사용자: 애니메이션·전환을 사실상 끈다(색 변화는 즉시) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  button:not(:disabled):active {
+    transform: none;
+  }
+}
+
+/* 본문으로 건너뛰기(키보드 사용자용) — 평소엔 숨어 있다가 Tab을 누르면 나타난다 */
+/* 화면 전체 높이 — 모바일 브라우저는 100vh가 주소창 뒤까지 잡혀 아래쪽이 가려진다.
+   지원하는 브라우저에서는 실제 보이는 높이(dvh)를 쓴다. */
+/* 업무 화면(AdminShell)이 떠 있는 동안 문서 스크롤 잠금 — 스크롤은 본문·메뉴 안에서만 (2026-10-26) */
+@media screen {
+  html.shell-lock,
+  html.shell-lock body {
+    overflow: hidden;
+    height: 100%;
+  }
+}
+
+.app-shell-height {
+  height: 100vh;
+  height: 100dvh;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  z-index: 100;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: var(--brand-deep-green-strong);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+.skip-link:focus {
+  top: 10px;
+}
+
+/* 접수증 등 인쇄 화면 공통 설정 (섹션 M1 접수증 PDF) */
+@media print {
+  @page {
+    size: A4;
+    margin: 15mm;
+  }
+  body {
+    background: white;
+  }
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
